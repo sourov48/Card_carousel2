@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Card Carousel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .custom-carousel-container {
+            position: relative;
+            overflow: hidden;
+            width: 80%;
+        }
+        .custom-carousel-wrapper {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .custom-card {
+            flex: 0 0 calc(100% / 6);
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .custom-card-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .custom-button-container {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        .custom-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .custom-card {
+                flex: 0 0 calc(100% / 2);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="custom-carousel-container">
+    <div class="custom-carousel-wrapper">
+        <div class="custom-card"><div class="custom-card-content">Card 1</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 2</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 3</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 4</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 5</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 6</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 7</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 8</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 9</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 10</div></div>
+        <!-- Duplicate cards for seamless looping -->
+        <div class="custom-card"><div class="custom-card-content">Card 1</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 2</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 3</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 4</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 5</div></div>
+        <div class="custom-card"><div class="custom-card-content">Card 6</div></div>
+    </div>
+    <div class="custom-button-container">
+        <button class="custom-button" onclick="prevSlide()"><</button>
+        <button class="custom-button" onclick="nextSlide()">></button>
+    </div>
+</div>
+
+<script>
+    const wrapper = document.querySelector('.custom-carousel-wrapper');
+    const totalCards = document.querySelectorAll('.custom-card').length;
+    let currentIndex = 0;
+    let cardsToShow = window.innerWidth > 768 ? 6 : 2;
+
+    function updateCarousel() {
+        const offset = -(currentIndex * 100) / cardsToShow;
+        wrapper.style.transition = currentIndex === 0 || currentIndex === totalCards - cardsToShow ? 'none' : 'transform 0.5s ease';
+        wrapper.style.transform = `translateX(${offset}%)`;
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        if (currentIndex < 0) {
+            currentIndex = totalCards - cardsToShow - 1;
+            wrapper.style.transition = 'none';
+            updateCarousel();
+        } else {
+            updateCarousel();
+        }
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalCards;
+        if (currentIndex >= totalCards - cardsToShow) {
+            setTimeout(() => {
+                currentIndex = 0;
+                wrapper.style.transition = 'none';
+                updateCarousel();
+            }, 500);
+        } else {
+            updateCarousel();
+        }
+    }
+
+    window.addEventListener('resize', () => {
+        cardsToShow = window.innerWidth > 768 ? 6 : 2;
+        updateCarousel();
+    });
+
+    updateCarousel();
+</script>
+
+</body>
+</html>
